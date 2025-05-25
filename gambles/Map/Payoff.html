@@ -1,0 +1,165 @@
+{% extends "global/Page.html" %}
+
+{% block head %}
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+<style>
+    body {
+        background: #0f0f0f;
+        margin: 0;
+        padding: 0;
+        font-family: 'Rajdhani', sans-serif;
+        color: #eee;
+    }
+
+    .container {
+        max-width: 600px;
+        margin-top: 100px;
+    }
+
+    .card {
+        background: #1c1c1c;
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    }
+
+    .card-body {
+        padding: 40px 20px;
+        position: relative;
+        text-align: center;
+    }
+
+    .card-text {
+        font-size: 1.2em;
+        margin-bottom: 20px;
+    }
+
+    /* Bonus heading */
+    .bonus-heading {
+        font-size: 2em;
+        font-weight: 700;
+        margin-bottom: 30px;
+        display: inline-block;
+        position: relative;
+        color: #00e676;
+        text-shadow: 0 0 15px #00e676;
+        animation: glow-green 1.5s infinite alternate;
+    }
+
+    .bonus-heading::before {
+        content: "★ ★ ★";
+        display: block;
+        font-size: 0.8em;
+        color: #00e676;
+        margin-bottom: 10px;
+        opacity: 0.9;
+        letter-spacing: 4px;
+    }
+
+    @keyframes glow-green {
+        from {
+            text-shadow: 0 0 10px #00e676;
+        }
+        to {
+            text-shadow: 0 0 20px #00e676;
+        }
+    }
+
+    /* No-bonus heading */
+    .no-bonus-heading {
+        font-size: 2em;
+        font-weight: 700;
+        margin-bottom: 30px;
+        display: inline-block;
+        position: relative;
+        color: #ff5252;
+        text-shadow: 0 0 15px #ff5252;
+        animation: glow-red 1.5s infinite alternate;
+    }
+
+    .no-bonus-heading::before {
+        content: "✖ ✖ ✖";
+        display: block;
+        font-size: 0.8em;
+        color: #ff5252;
+        margin-bottom: 10px;
+        opacity: 0.9;
+        letter-spacing: 4px;
+    }
+
+    @keyframes glow-red {
+        from {
+            text-shadow: 0 0 10px #ff5252;
+        }
+        to {
+            text-shadow: 0 0 20px #ff5252;
+        }
+    }
+
+    .lead {
+        font-size: 1.4em;
+        font-weight: 700;
+        color: #fff;
+        margin-top: 30px;
+        text-shadow: 0 0 5px rgba(0,0,0,0.5);
+    }
+
+    .lead::after {
+        content: "";
+        display: block;
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(45deg, #7f00ff, #e100ff);
+        margin: 15px auto 0;
+        border-radius: 2px;
+    }
+
+    /* Highlight submission code */
+    .card-body strong {
+        color: #fff;
+        font-weight: 700;
+        background: linear-gradient(45deg, #7f00ff, #e100ff);
+        padding: 3px 8px;
+        border-radius: 4px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.7);
+        display: inline-block;
+        margin-top: 20px;
+    }
+
+    @media (max-width: 600px) {
+        .card-body {
+            padding: 30px 15px;
+        }
+
+        .bonus-heading, .no-bonus-heading {
+            font-size: 1.6em;
+        }
+
+        .lead {
+            font-size: 1.2em;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    {% if received_bonus %}
+                        <p class="bonus-heading">Congratulations! You received a bonus!</p>
+                        <p class="card-text">Your Submission code is: <strong>C184QS4S</strong></p>
+                    {% else %}
+                        <p class="no-bonus-heading">Unfortunately, you did not receive a bonus.</p>
+                        <p class="card-text">Your Submission code is: <strong>C1HOCDRP</strong></p>
+                    {% endif %}
+                    <p class="card-text lead">Your total payoff is: £{{ total_payoff }}</p>
+                    <p class="card-text" style="margin-top:30px;">Thank you for participating in this experiment.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

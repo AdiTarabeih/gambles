@@ -1,0 +1,116 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block head %}
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+/* ========== GLOBAL LAYOUT & TYPOGRAPHY ========== */
+html,body{
+    margin:0;padding:0;width:100%;height:100%;
+    font-family:'Open Sans',sans-serif;color:#333;background:#f7f7f7;
+    overflow:hidden;                      /* scroll disabled by default */
+}
+h1{margin:4px 0 8px 0;font-size:1.4rem;text-align:center;}
+strong{font-weight:600;}
+
+/* ========== CARD CONTAINER ========== */
+.map-container{
+    background:#fff;border-radius:6px;box-shadow:0 0 15px rgba(0,0,0,.1);
+    width:90%;max-width:900px;padding:12px;margin:auto;
+}
+
+/* ========== 7 × 6 GRID (42 cells) ========== */
+.single-map{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    grid-template-rows:repeat(6,1fr);
+    gap:5px;
+    margin:10px 0 20px 0;
+}
+.place,.invest-btn{
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    height:48px;border-radius:4px;font-size:.85rem;font-weight:500;
+}
+.place{background:#e1e1e1;border:1px solid #ccc;}
+.tag{font-size:.7rem;font-weight:600;color:#333;margin-top:2px;}
+
+/* non-clickable “invest” button slot */
+.invest-btn.no-click{
+    pointer-events:none;background:#28a745;cursor:default;
+}
+
+/* purple CONTINUE */
+.btn-container{position:fixed;bottom:80px;right:150px;z-index:1000;}
+.btn.btn-primary{
+    background:linear-gradient(45deg,#7f00ff,#e100ff);border:none;
+    padding:.5rem 1rem;font-size:.9rem;font-weight:700;color:#fff;border-radius:4px;
+    box-shadow:0 0 10px rgba(0,0,0,.5);
+}
+.btn.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 20px rgba(0,0,0,.7);}
+</style>
+
+<!-- if a form error appears, restore scroll -->
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+    if (document.querySelector('.otree-form-errors, .alert-danger')){
+        document.documentElement.style.overflow='auto';
+        document.body.style.overflow='auto';
+    }
+});
+</script>
+{% endblock %}
+
+{% block content %}
+{% if player.round_number == 1 %}
+  <h1>Your Investment Decision</h1>
+{% else %}
+  <h1>Your Investment Decision in Round&nbsp;{{ player.round_number }}</h1>
+{% endif %}
+
+<strong>The numbers in grey show each the payoffs each investor received in previous trials.</strong><br><br>
+<strong>To imitate an investor, type the <u>two-letter initials</u> that appear in the grey cell you wish to copy, then press <em>Continue</em>.</strong>
+
+<div class="map-container">
+<form method="post">
+    {{ formfield_errors 'chosen_initials' }}
+    <input type="hidden" name="chosen_initials" id="chosen_initials">
+
+    <!-- input box -->
+    <div style="margin:12px 0;">
+        <label><strong>Peer initials:&nbsp;</strong></label>
+        <input type="text" id="typed_tag" maxlength="2"
+               style="width:60px;text-transform:uppercase;"
+               oninput="typedChanged(this.value)">
+        <span style="font-size:.85rem;color:#777;">(two capital letters)</span>
+    </div>
+
+    <!-- -------- SINGLE GRID (42 cells) -------- -->
+    <div class="single-map">
+{% for index, pay, tag in values_with_indices %}
+    {% if index == 13 or index == 34 %}
+        <div class="invest-btn no-click"></div>
+    {% else %}
+        <div class="place">
+            <div>{{ pay }}</div>
+            <div class="tag">{{ tag }}</div>
+        </div>
+    {% endif %}
+{% endfor %}
+
+    </div>
+
+    <div class="btn-container">
+      <button type="submit" class="btn btn-primary">Continue</button>
+    </div>
+</form>
+</div>
+
+<script>
+function typedChanged(v){
+    v=(v||'').toUpperCase();
+    document.getElementById('typed_tag').value = v;
+    document.getElementById('chosen_initials').value = v;
+}
+</script>
+{% endblock %}

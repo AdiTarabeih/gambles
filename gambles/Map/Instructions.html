@@ -1,0 +1,219 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block head %}
+<link
+    href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap"
+    rel="stylesheet"
+/>
+<style>
+    /* 1) Basic page setup, hide scrollbars */
+    html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
+        background: #f7f7f7;
+        color: #333;
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    /* 2) Remove extra top padding; center horizontally */
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* 3) The white “card” container
+       - Slightly widen so text flows more before wrapping
+       - Remove the transform scale to allow more space */
+    .container {
+        background: #fff;
+        border-radius: 6px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        width: 95%;
+        max-width: 1050px;
+        padding: 20px;
+        box-sizing: border-box;
+        text-align: left;
+        margin-top: -10px;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 1.6rem; /* or 1.5rem */
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 15px;
+        margin-top: 0;
+        position: relative;
+    }
+    h1::after {
+        content: "";
+        display: block;
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(45deg, #e100ff, #7f00ff);
+        margin: 8px auto 0;
+        border-radius: 2px;
+    }
+
+    /* 4) Larger text (1.2rem), moderate line-height,
+       and reduce bottom margins if needed to save space */
+    p,
+    ul {
+        font-size: 1.2rem;
+        line-height: 1.5;
+        color: #555;
+        margin-bottom: 14px;
+    }
+    ul {
+        list-style: disc inside;
+    }
+    li {
+        margin-bottom: 8px;
+    }
+    strong {
+        color: #333;
+        font-weight: 700;
+    }
+
+    /* 5) The “Continue” button in a purple gradient */
+    .btn-primary {
+        display: inline-block;
+        background: linear-gradient(45deg, #7f00ff, #e100ff);
+        border: none;
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 700;
+        padding: 12px 25px;
+        border-radius: 6px;
+        cursor: pointer;
+        text-align: center;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        margin-top: 20px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+
+    form {
+        margin-top: 10px;
+    }
+
+    /* 6) Small-screen adjustments */
+    @media (max-width: 600px) {
+        .container {
+            padding: 15px;
+            /* Keep width at 95%, but remove scaling so text can still span more if needed */
+        }
+        h1 {
+            font-size: 1.4rem;
+        }
+        p,
+        ul {
+            font-size: 1.05rem;
+            line-height: 1.4;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Experiment Instructions</h1>
+
+    <p>
+        Welcome to the decision-making experiment.
+    </p>
+    <p>
+       In this study, your task is to choose which of 40 investors to imitate.
+        Each investor has previously invested in one of two zones: Zone A or Zone B.
+        Your final payoff will depend on the performance of the investor you select in the next trial. The better your chosen investor performs, the higher your chances of receiving a <strong>£{{ C.bonus_pay }}0 bonus</strong>.
+   </p>
+
+
+{%comment%}
+    <!-- {% if participant_condition in ['condition1', 'condition2'] %}
+    <p>The feasible investment options for <strong>Round 1</strong> are:</p>
+    <ul>
+        <li>
+            <strong>A:</strong> Projects in "Zone A" yield approximately <strong>45</strong> points.
+        </li>
+        <li>
+            <strong>B: 90%</strong> of projects in "Zone B" yield approximately <strong>50</strong> points.<br>
+            <span style="display: inline-block; margin-left: 3em;">
+                <strong>10% </strong> of projects in "Zone B" yield <strong>0</strong> points.
+            </span>
+
+        </li>
+    </ul>
+    <p>The feasible investment options for <strong>Round 2</strong> are:</p>
+    <ul>
+        <li>
+            <strong>A:</strong> Projects in "Zone A" yield approximately <strong>5</strong> points.
+        </li>
+        <li>
+            <strong>B: 90%</strong> of projects in "Zone B" yield approximately <strong>0</strong> points.<br>
+            <span style="display: inline-block; margin-left: 3em;">
+                <strong>10% </strong> of projects in "Zone B" yield <strong>50</strong> points.
+            </span>
+
+        </li>
+    </ul>
+    {% endif %}
+
+    {% if participant_condition in ['condition1B', 'condition2B'] %}
+    <p>The feasible investment options for <strong>Round 1</strong> are:</p>
+    <ul>
+        <li>
+            <strong>A:</strong> Projects in "Zone A" yield approximately <strong>5</strong> points.
+        </li>
+        <li>
+            <strong>B: 90%</strong> of projects in "Zone B" yield approximately <strong>0</strong> points.<br>
+            <span style="display: inline-block; margin-left: 3em;">
+                <strong>10% </strong> of projects in "Zone B" yield <strong>50</strong> points.
+            </span>
+
+        </li>
+    </ul>
+    <p>The feasible investment options for <strong>Round 2</strong> are:</p>
+    <ul>
+        <li>
+            <strong>A:</strong> Projects in "Zone A" yield approximately <strong>45</strong> points.
+        </li>
+        <li>
+            <strong>B: 90%</strong> of projects in "Zone B" yield approximately <strong>50</strong> points.<br>
+            <span style="display: inline-block; margin-left: 3em;">
+                <strong>10% </strong> of projects in "Zone B" yield <strong>0</strong> points.
+            </span>
+
+        </li>
+    </ul>
+    {% endif %}
+
+
+
+ <ul>
+    <li><b>Investment options </b> will be provided at the beginning of the round.</li>
+</ul>
+
+    <p>
+        <strong>The more points you earn, the greater your chances of receiving a bonus.</strong>
+    </p>
+    <p>
+        After clicking "Continue", you will make your investment choice, once it's completed,
+        your payoff will be calculated and displayed."
+    </p> -->
+    {% endcomment %}
+
+    <form method="post">
+        <button type="submit" class="btn-primary">Continue</button>
+    </form>
+</div>
+{% endblock %}
